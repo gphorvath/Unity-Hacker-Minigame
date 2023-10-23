@@ -1,18 +1,29 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using HackerMinigame.FileSystem;
 using HackerMinigame.SystemProcesses;
 
 namespace HackerMinigame
 {
-    public class HackerMinigameWrapper
+    public class HackerMinigameManager : MonoBehaviour
     {
         private FileSystemManager _fileSystemManager = new FileSystemManager();
         private ProcessManager _processManager = new ProcessManager();
 
-        public HackerMinigameWrapper()
+        void Start()
         {
+            Terminal.WriteLine("Type 'help' for a list of commands");
+        }
 
+        void OnUserInput(string input)
+        {
+            if (input == "clear")
+            {
+                Terminal.ClearScreen();
+                return;
+            }
+            Terminal.WriteLine(ParseCommand(input));
         }
 
         // Call this function with input from the user
