@@ -30,6 +30,40 @@ namespace HackerMinigame.FileSystem
             user.AddFile(file1);
         }
 
+        public FileSystemManager(string[] initialPaths, File[] initialFiles)
+        {
+            root = new Directory("/");
+            CurrentDirectory = root;
+
+            // Setup initial directories
+            foreach (var path in initialPaths)
+            {
+                var parts = path.Split('/');
+                var dir = root;
+                for (int i = 0; i < parts.Length; i++)
+                {
+                    if (parts[i] == "")
+                        continue;
+                    var newDir = new Directory(parts[i]);
+                    dir.AddDirectory(newDir);
+                    dir = newDir;
+                }
+            }
+
+            // Setup initial files
+            foreach (File file in initialFiles)
+            {
+                var parts = file.Name.Split('/');
+                var dir = root;
+                for (int i = 0; i < parts.Length - 1; i++)
+                {
+                    dir = dir.Directories.Find(d => d.Name == parts[i]);
+                }
+                var newFile = new File(parts[parts.Length - 1], file.Content);
+                dir.AddFile(newFile);
+            }
+        }
+
         public bool ChangeDirectory(string name)
         {
             if (name == "..")

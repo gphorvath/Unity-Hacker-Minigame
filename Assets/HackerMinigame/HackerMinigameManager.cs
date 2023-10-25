@@ -8,11 +8,19 @@ namespace HackerMinigame
 {
     public class HackerMinigameManager : MonoBehaviour
     {
-        private FileSystemManager _fileSystemManager = new FileSystemManager();
-        private ProcessManager _processManager = new ProcessManager();
+        [Header("File System Configuration")]
+        [field: SerializeField] private string[] initialPaths = { "bin", "home/user", "logs" };
+        [field:SerializeField] private File[] initialFiles;
+        private FileSystemManager _fileSystemManager;
+
+        [Header("System Processes Configuration")]
+        [field: SerializeField] private string[] initialProcessNames = { "system", "network-service", "x-server", "terminal" };
+        private ProcessManager _processManager;
 
         void Start()
         {
+            _fileSystemManager = new FileSystemManager(initialPaths, initialFiles);
+            _processManager = new ProcessManager(initialProcessNames);
             Terminal.WriteLine("Type 'help' for a list of commands");
         }
 

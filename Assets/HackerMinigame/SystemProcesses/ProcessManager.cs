@@ -21,6 +21,18 @@ namespace HackerMinigame.SystemProcesses
             StartProcess("terminal");
         }
 
+        public ProcessManager(string[] initialProcessNames)
+        {
+            processes = new List<Process>();
+            random = new Random();
+
+            // Start some default processes
+            foreach (var name in initialProcessNames)
+            {
+                StartProcess(name);
+            }
+        }
+
         public Process StartProcess(string name)
         {
             int randomPID;

@@ -2,11 +2,11 @@ using System.Collections.Generic;
 
 namespace HackerMinigame.FileSystem
 {
-
-    public class File
+    [System.Serializable]
+    public struct File
     {
-        public string Name { get; private set; }
-        public string Content { get; private set; }
+        public string Name;
+        public string Content;
 
         public File(string name, string content)
         {
