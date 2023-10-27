@@ -79,5 +79,10 @@ namespace HackerMinigame.SystemProcesses
 
             return false; // process not found
         }
+
+        public Process GetProcess(int pid)
+        {
+            return processes.Find(p => p.PID == pid);
+        }
     }
 }

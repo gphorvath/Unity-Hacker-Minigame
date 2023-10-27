@@ -17,6 +17,10 @@ namespace HackerMinigame
         [field: SerializeField] private string[] initialProcessNames = { "system", "network-service", "x-server", "terminal" };
         private ProcessManager _processManager;
 
+
+        // Events
+        public event Action<Process> OnProcessKilled;
+
         void Start()
         {
             _fileSystemManager = new FileSystemManager(initialPaths, initialFiles);
@@ -195,10 +199,26 @@ namespace HackerMinigame
                 bool success = int.TryParse(parts[1], out pid);
                 if (success)
                 {
-                    success = _processManager.KillProcess(pid);
-                    if (!success)
+                    Process process = _processManager.GetProcess(pid);
+                    if (process == null)
                     {
                         output = "No such process";
+                    }
+                    else if (process.Name == "system")
+                    {
+                        output = "Cannot kill system process";
+                    }
+                    else
+                    {
+                        success = _processManager.KillProcess(pid);
+                        if (!success)
+                        {
+                            output = "No such process";
+                        }
+                        else if (success)
+                        {
+                            OnProcessKilled?.Invoke(process);
+                        }
                     }
                 }
                 else
