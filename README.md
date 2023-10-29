@@ -35,6 +35,15 @@ This is designed to be a mock terminal without any real functionality. The mock 
 | start \<file> | No | Create a process from an executable file. |
 | touch \<file> | Yes | create file |
 
+## Events
+
+| Event | Implemented | Description |
+| --- | --- | ---|
+| OnFileCreated | No | Returns an object of type `File` that was created. |
+| OnFileDeleted | No | Returns an object of type `File` that was deleted. |
+| OnProcessKilled | Yes | Returns an object of type `Process` that was killed. |
+| OnProcessStarted | No | Returns an object of type `Process` that was started. |
+
 ## TODO
 
 * Pagination for commands that produce long results
@@ -42,3 +51,4 @@ This is designed to be a mock terminal without any real functionality. The mock 
 * Implement events that fire when goals are achieved
 * Implement `cp` to copy files
 * Implement `run` and `start` for running scripts and processes
+* Add passwords, `user` and `root` accounts, and `su` and `sudo` commands.
