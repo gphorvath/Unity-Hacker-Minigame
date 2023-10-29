@@ -440,6 +440,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f021fb3f95cf9df42819d684cea76050, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialPaths:
+  - bin
+  - home/user
+  - logs
+  initialFiles:
+  - Name: home/user/readme.txt
+    Content: This is a readme file.
+  initialProcessNames:
+  - system
+  - network-service
+  - x-server
+  - terminal
 --- !u!4 &1590598725
 Transform:
   m_ObjectHideFlags: 0
