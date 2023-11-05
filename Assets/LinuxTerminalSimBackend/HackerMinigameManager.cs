@@ -10,13 +10,13 @@ namespace HackerMinigame
     {
         [Header("File System Configuration")]
         [field: SerializeField] private string[] initialPaths = { "bin", "home/user", "logs" };
-        [field:SerializeField] private File[] initialFiles;
+        [field: SerializeField] private File[] initialFiles;
+        [field: SerializeField] private List<char> _dirtyCharacters = new List<char>() { ' ', '\n', '\r', '\t', '$', '>', '<', '/', '\\' };
         private FileSystemManager _fileSystemManager;
 
         [Header("System Processes Configuration")]
         [field: SerializeField] private string[] initialProcessNames = { "system", "network-service", "x-server", "terminal" };
         private ProcessManager _processManager;
-
 
         // Events
         public event Action<Process> OnProcessKilled;
@@ -110,6 +110,11 @@ namespace HackerMinigame
             string output = "";
             if (parts.Length > 1)
             {
+                if(checkMissingOperand(parts[1]))
+                {
+                    output = "Specify a file name";
+                    return output;
+                }
                 output = _fileSystemManager.ReadFile(parts[1]);
             }
             else
@@ -241,9 +246,29 @@ namespace HackerMinigame
         private string mkdir(string[] parts)
         {
             string output = "";
+
             if (parts.Length > 1)
             {
-                _fileSystemManager.CreateDirectory(parts[1]);
+                if (checkMissingOperand(parts[1]))
+                {
+                    output = "Specify a directory name";
+                    return output;
+                }
+
+                if (checkDirtyCharacters(parts[1]))
+                {
+                    output = "Invalid directory name";
+                    return output;
+                }
+
+                if (_fileSystemManager.DirectoryExists(parts[1]))
+                {
+                    output = "Directory already exists";
+                }
+                else
+                {
+                    _fileSystemManager.CreateDirectory(parts[1]);
+                }
             }
             else
             {
@@ -267,6 +292,17 @@ namespace HackerMinigame
             string output = "";
             if (parts.Length > 1)
             {
+                if (checkMissingOperand(parts[1]))
+                {
+                    output = "Specify a file or directory name";
+                    return output;
+                }
+                if (!_fileSystemManager.FileExists(parts[1]) && !_fileSystemManager.DirectoryExists(parts[1]))
+                {
+                    output = "No such file or directory";
+                    return output;
+                }
+
                 _fileSystemManager.Delete(parts[1]);
             }
             else
@@ -281,6 +317,13 @@ namespace HackerMinigame
             string output = "";
             if (parts.Length > 1)
             {
+                if (checkMissingOperand(parts[1]))
+                {
+                    output = "Specify a file name";
+                    return output;
+                }
+
+
                 _fileSystemManager.CreateFile(parts[1], "");
             }
             else
@@ -289,5 +332,27 @@ namespace HackerMinigame
             }
             return output;
         }
+
+
+        private bool checkDirtyCharacters(string input)
+        {
+            foreach (char c in _dirtyCharacters)
+            {
+                if (input.Contains(c))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool checkMissingOperand(string input)
+        {
+            if (input == "")
+            {
+                return true;
+            }
+            return false;
+        }   
     }
 }
