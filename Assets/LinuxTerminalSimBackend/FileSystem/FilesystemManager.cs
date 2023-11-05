@@ -145,8 +145,36 @@ namespace HackerMinigame.FileSystem
             return "No such file";
         }
 
+        public bool FileExists(string name)
+        {
+            foreach (var file in CurrentDirectory.Files)
+            {
+                if (file.Name == name)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool DirectoryExists(string name)
+        {
+            foreach (var dir in CurrentDirectory.Directories)
+            {
+                if (dir.Name == name)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void CreateDirectory(string name)
         {
+            if (DirectoryExists(name))
+            {
+                return;
+            }
             var newDir = new Directory(name);
             CurrentDirectory.AddDirectory(newDir);
         }
